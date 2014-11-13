@@ -1,6 +1,6 @@
-SparkAI
+Spark_DBSCAN
 =======
-Spark AI is a scala open source library of clustering algorithms implemented for Apache Spark
+Spark_DBSCAN is a scala open source library of clustering algorithms implemented for Apache Spark
 
 ## Installation
 
@@ -17,3 +17,7 @@ Download the jar file located [here](https://s3-eu-west-1.amazonaws.com/aizook/0
 #### 0.0.1:
 ###### New features:
 * DBSCAN Algorithm
+
+#### 0.0.2:
+###### Bug fixing:
+* [DBSCAN-0001] Predict function returns an exception when the tested point does not belong to a cluster

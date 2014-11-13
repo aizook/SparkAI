@@ -26,7 +26,11 @@ pt_clust.map(x => (x._1.toLong, (x._2._1, x._2._2._1, x._2._2._2)));
 
 def predict(point: (Long, (Double, Double))): Long = {
 val eps_squared = eps * eps;
+var cluster_max:Long = -1
 val dist:RDD[(Long, Long, Double)] = model.map(x => (x._1, x._2._1, (x._2._2 - point._2._1) * (x._2._2 - point._2._1) + (x._2._3 - point._2._2) * (x._2._3 - point._2._2))).filter(x => x._3 <= eps_squared);  
-dist.map(x => (x._2, 1)).reduceByKey(_+_).filter(x => x._2 >= minPts).max()._1
+val clusters = dist.map(x => (x._2, 1)).reduceByKey(_+_).filter(x => x._2 >= minPts)
+if(clusters.count != 0)
+cluster_max = clusters.max()._1
+cluster_max
 }
 }
