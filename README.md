@@ -4,7 +4,7 @@ Spark_DBSCAN is a scala open source library of clustering algorithms implemented
 
 ## Installation
 
-Download the jar file located [here](https://s3-eu-west-1.amazonaws.com/aizook/0.0.1/sparkai_2.10-0.0.1.jar) and copy it to your library
+Download the jar file located [here](https://s3-eu-west-1.amazonaws.com/aizook/0.0.2-RC/sparkai_2.10-0.0.2-RC.jar) and copy it to your library
 
 ## Example
     import org.aizook.scala.clustering.Spark_DBSCAN.DBSCAN
