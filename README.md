@@ -8,8 +8,10 @@ Download the jar file located [here](https://s3-eu-west-1.amazonaws.com/aizook/0
 
 ## Example
     import org.aizook.scala.clustering.Spark_DBSCAN.Dbscan
+    val eps = 3.0
+    val minPts = 5
     val data = sc.textFile("data.csv").map(_.split(",")).map(p => (p(0).trim.toDouble, p(1).trim.toDouble)).zipWithUniqueId().map(x => (x._2,x._1)).cache
-    val cluster:Dbscan = new Dbscan(3,5,data)
+    val cluster:Dbscan = new Dbscan(eps,minPts,data)
     cluster.predict((2000,(48.3,33.1)))
 
 ## Release Note
