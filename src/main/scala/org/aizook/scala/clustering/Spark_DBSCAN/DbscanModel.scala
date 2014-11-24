@@ -14,7 +14,7 @@ def train():RDD[(Long, (Long, Double, Double))] = {
 val eps_squared = eps * eps;
 val vertex: RDD[(VertexId, (Double, Double))] = points;
 
-val edge:RDD[Edge[Double]] = vertex.cartesian(vertex).map(x => Edge(x._1._1,x._2._1,(x._1._2._1 - x._2._2._1) * (x._1._2._1 - x._2._2._1) + (x._1._2._2 - x._2._2._2) * (x._1._2._2 - x._2._2._2))).filter(x => x.attr <= eps_squared);
+val edge:RDD[Edge[Double]] = vertex.cartesian(vertex).map(x => Edge(x._1._1,x._2._1,(x._1._2._1 - x._2._2._1) * (x._1._2._1 - x._2._2._1) + (x._1._2._2 - x._2._2._2) * (x._1._2._2 - x._2._2._2))).filter(x => x.attr <= eps_squared&&x.srcId!=x.dstId);
 
 val graph = Graph(vertex, edge);
 
