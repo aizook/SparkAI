@@ -16,21 +16,26 @@ val vertex: RDD[(VertexId, (Double, Double))] = points;
 
 val edge:RDD[Edge[Boolean]] = vertex.cartesian(vertex).map(x => Edge(x._1._1,x._2._1,(x._1._2._1 - x._2._2._1) * (x._1._2._1 - x._2._2._1) + (x._1._2._2 - x._2._2._2) * (x._1._2._2 - x._2._2._2)<=eps_squared)).filter(x => x.attr&&x.srcId!=x.dstId );
 
+
 val graph = Graph(vertex, edge);
 
 //P are the core points of the clusters
-val P = graph.outDegrees.filter(deg => deg._2 >= minPts);
+val P = graph.outDegrees.filter(deg => deg._2 >= minPts).innerJoin(vertex)((id,clust,p)=>(id,p)).map(x => (x._1.toLong,(x._2._2._1, x._2._2._2))).cache;
+
 
  
 // core_edges are the edges which emanate from the core points to all the other points (including core points and boarder points)
-val core_edges = P.cartesian(vertex).map(x=>Edge(x._1._1, x._2._1, true));
-
+// val core_edges = P.cartesian(vertex).map(x=>Edge(x._1._1, x._2._1, true));
 // valid_edges are the intersection, which means all the valid edges needed to be considered
-val valid_edges = core_edges.intersection(edge);
+//val valid_edges = core_edges.intersection(edge);
 
-// the final graph needs to be built based on the valid edges instead of all the edges as line 17
-val cluster = Graph(P, valid_edges).connectedComponents().vertices;
+val final_edges = P.cartesian(vertex).map(x=>Edge(x._1._1,x._2._1,(x._1._2._1 - x._2._2._1) * (x._1._2._1 - x._2._2._1) + (x._1._2._2 - x._2._2._2) * (x._1._2._2 - x._2._2._2)<=eps_squared)).filter(x => (x.attr && x.srcId!=x.dstId)).cache;
+
+
+// the final graph needs to be built based on the final edges
+val cluster = Graph(P, final_edges).connectedComponents().vertices;
 val pt_clust = cluster.innerJoin(vertex)((id, clust, p) => (clust,p));
+
 pt_clust.map(x => (x._1.toLong, (x._2._1, x._2._2._1, x._2._2._2)));
 }
 
