@@ -29,4 +29,11 @@ model = new DbscanModel(p_eps, p_minPts, p_points);
 def predict(point: (Long, (Double, Double))): Long = {
 model.predict(point);
 }
+/** Get the Identifier of the clusters fitting a list of points contained in a RDD
+  *
+  * @param points: RDD[(Long, (Double, Double))] containing the points to be analyzed
+  */
+def predict(points: RDD[(Long, (Double, Double))]): RDD[(Long, Long)] = {
+model.predict(points);
+}
 }

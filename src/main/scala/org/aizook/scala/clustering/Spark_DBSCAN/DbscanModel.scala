@@ -48,4 +48,12 @@ if(clusters.count != 0)
 cluster_max = clusters.max()._1
 cluster_max
 }
+
+def predict(points: RDD[(Long, (Double, Double))]): RDD[(Long, Long)] = {
+val eps_squared = eps * eps;
+val dist:RDD[((Long, Long), Double)] = points.cartesian(model).map(x => ((x._1._1,x._2._2._1),(x._1._2._1 - x._2._2._2) * (x._1._2._1 - x._2._2._2) + (x._1._2._2 - x._2._2._3) * (x._1._2._2 - x._2._2._3))).filter(x => x._2 <= eps_squared);
+val clusters = dist.map(x => (x._1, 1)).reduceByKey(_+_).filter(x => x._2 >= minPts)
+val cluster_max = clusters.reduceByKey(math.max(_ , _))
+points.map(x => (x._1,x._1)).leftOuterJoin(cluster_max.map(x => x._1)).map(x => (x._1, x._2._2.getOrElse(-1)))
+}
 }
