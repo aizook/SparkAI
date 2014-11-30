@@ -26,3 +26,4 @@ Should return -1 when the tested point fits noise or the cluster id otherwise
 ###### Bug fixing:
 * [DBSCAN-0001] Predict function returns an exception when the tested point does not belong to a cluster
 * luborliu/patch-2 Issue of the algorithm implementation besides the small condition
+* luborliu/patch-3 Improve the efficiency of the code
